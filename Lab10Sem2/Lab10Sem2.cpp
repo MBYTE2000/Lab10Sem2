@@ -2,8 +2,8 @@
 #include <fstream>
 #include <cstring>
 
-const int TABLE_SIZE = 10;
-const int MAX_RECORDS = 100;
+int TABLE_SIZE = 10;
+int MAX_RECORDS = 100;
 
 struct Record {
     int key;
@@ -17,17 +17,21 @@ struct Node {
 
 class HashTable {
 private:
-    Node* table[TABLE_SIZE];
+    int tableSize;
+    Node** table;
 
 public:
-    HashTable() {
-        for (int i = 0; i < TABLE_SIZE; i++) {
+    HashTable(int size) {
+        tableSize = size;
+        table = new Node * [tableSize];
+        for (int i = 0; i < tableSize; i++) {
             table[i] = nullptr;
         }
     }
 
     ~HashTable() {
         clear();
+        delete[] table;
     }
 
     void printTable() {
@@ -55,7 +59,7 @@ public:
     }
 
     void clear() {
-        for (int i = 0; i < TABLE_SIZE; i++) {
+        for (int i = 0; i < tableSize; i++) {
             Node* current = table[i];
             while (current != nullptr) {
                 Node* temp = current;
@@ -143,8 +147,12 @@ void searchRecord(HashTable& hashtable) {
 }
 
 int main() {
-    HashTable hashtable;
+    std::cout<< "table size:" << std::endl;
+    std::cin >> TABLE_SIZE;
+    std::cout << "record size:" << std::endl;
+    std::cin >> MAX_RECORDS;
 
+    HashTable hashtable(TABLE_SIZE);
     while (true) {
         std::cout << "1. Add record" << std::endl;
         std::cout << "2. Search record" << std::endl;
